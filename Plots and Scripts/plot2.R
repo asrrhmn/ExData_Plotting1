@@ -3,11 +3,24 @@ library(dplyr)
 
 # get required local path
 lpath <- getwd()
+#Download URL for source dataset ( the file if zipped to save network bandwidth)
+URL <-"https://drive.google.com/file/d/1I4FGLXRiGQgMszrCSEg9yaX0fYYIztMt/view?usp=sharing"
 
-#retrieve the file using read.delim as we are working with
-#delimited text file with delimited symbol as ";"
-powerdf <- read.delim(file.path(lpath,"/household_power_consumption.txt")
-                      ,sep = ";", na.strings = "?")
+if (!file.exists("household_power_consumption.txt")){
+  download.file(URL,destfile = "power_cons_ds.7z")
+  unzip("power_cons_ds.zip")
+  #retrieve the file using read.delim as we are working with
+  #delimited text file with delimited symbol as ";"
+  powerdf <- read.delim(file.path(lpath,"/household_power_consumption.txt")
+                        ,sep=";",na.strings = "?")
+  print("Data set downloaded and is ready to use")
+}else {
+  #retrieve the file using read.delim as we are working with
+  #delimited text file with delimited symbol as ";"
+  powerdf <- read.delim(file.path(lpath,"/household_power_consumption.txt")
+                        ,sep=";",na.strings = "?")
+  print("Data set already exist and is ready to use")
+}
 
 #create new column DateTime
 powerdf$DateTime <- as.POSIXct(paste(powerdf$Date, powerdf$Time), 
