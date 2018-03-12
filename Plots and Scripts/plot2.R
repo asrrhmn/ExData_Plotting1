@@ -1,7 +1,11 @@
+#Load required Library
+library(dplyr)
 
-#create new column DateTime
-powerdf$DateTime <- as.POSIXct(paste(powerdf$Date, powerdf$Time), 
-                               format = "%d/%m/%Y %H:%M:%S")
+# get required local path
+lpath <- getwd()
+
+#Download URL for source dataset ( the file if zipped to save network bandwidth)
+
 URL <-"https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_power_consumption.zip"
 
 if (!file.exists("household_power_consumption.txt")){
@@ -27,7 +31,9 @@ if (!file.exists("household_power_consumption.txt")){
   print("execution completed")
   print("Data set and is ready to use")
 }
-                      
+#create new column DateTime
+powerdf$DateTime <- as.POSIXct(paste(powerdf$Date, powerdf$Time), 
+                               format = "%d/%m/%Y %H:%M:%S")
 #filter for dates 2007-02-01 and 2007-02-02
 powerf2 <- powerdf%>% filter(DateTime>="2007-02-01" & DateTime < "2007-02-03")
 #2880 obs filtered to powerf2
